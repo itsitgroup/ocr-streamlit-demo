@@ -53,7 +53,7 @@ st.markdown(
 st.markdown(
     """
     <div class="logo">
-        <img src="https://yourcompanylogo.com/logo.png" alt="Company Logo">
+        <img src="https://github.com/itsitgroup/ocr-streamlit-demo/blob/main/logo.png" alt="Its IT Group Logo">
         <h1 class="header">Image to Text Converter</h1>
     </div>
     """,
@@ -108,7 +108,7 @@ with st.container():
 st.markdown(
     """
     <div class="footer">
-        &copy; 2024 Your Company Name. All rights reserved.
+        &copy; 2024 Its IT Group. All rights reserved.
     </div>
     """,
     unsafe_allow_html=True,
