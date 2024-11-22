@@ -85,25 +85,28 @@ with st.container():
 
         # Send the base64-encoded image to the backend
         with st.spinner("Processing image..."):
+            payload = {"body": image_base64}  # Wrap base64 string in a JSON object
             response = requests.post(
                 BACKEND_URL,
-                data=image_base64
+                json=payload  # Use `json` parameter to send as JSON
             )
 
         if response.status_code == 200:
             # Display the extracted text
             st.success("Text Extraction Successful!")
+            extracted_data = response.json()
             st.markdown(
                 f"""
                 <div style="padding: 10px; background-color: #e8f5e9; border-radius: 5px;">
                     <strong>Extracted Text:</strong>
-                    <p>{response.text}</p>
+                    <p>{extracted_data['body']['text']}</p>
+                    <strong>Processing Time:</strong> {extracted_data['body']['elapsedTime']}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
         else:
-            st.error(f"Error: {response.text}")
+            st.error(f"Error: {response.json().get('body', 'Unknown error occurred')}")
 
     # End container styling
     st.markdown('</div>', unsafe_allow_html=True)
