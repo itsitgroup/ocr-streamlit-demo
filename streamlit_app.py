@@ -94,13 +94,22 @@ with st.container():
         if response.status_code == 200:
             # Display the extracted text
             st.success("Text Extraction Successful!")
+            
+            # Parse the response
             extracted_data = response.json()
+            
+            # Ensure 'body' is parsed as JSON if it's a string
+            body_data = extracted_data["body"]
+            if isinstance(body_data, str):
+                body_data = eval(body_data)  # Safely convert string to dictionary
+
+            # Display the extracted text and processing time
             st.markdown(
                 f"""
                 <div style="padding: 10px; background-color: #e8f5e9; border-radius: 5px;">
                     <strong>Extracted Text:</strong>
-                    <p>{extracted_data['body']['text']}</p>
-                    <strong>Processing Time:</strong> {extracted_data['body']['elapsedTime']}
+                    <p>{body_data['text']}</p>
+                    <strong>Processing Time:</strong> {body_data['elapsedTime']}
                 </div>
                 """,
                 unsafe_allow_html=True,
