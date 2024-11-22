@@ -71,6 +71,10 @@ with st.container():
         # Open the uploaded image file using PIL
         image = Image.open(uploaded_file)
 
+        # Ensure the image is in RGB mode for JPEG compatibility
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+
         # Display the uploaded image
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
