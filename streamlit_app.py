@@ -25,7 +25,7 @@ st.markdown(
     .logo img {
         max-height: 60px;
         margin-right: 20px;
-    }
+    }p
     .header {
         color: #333333;
         font-family: 'Arial', sans-serif;
@@ -99,7 +99,7 @@ with st.container():
                 f"""
                 <div style="padding: 10px; background-color: #e8f5e9; border-radius: 5px;">
                     <strong>Extracted Text:</strong>
-                    <p>{extracted_data['body']['    ']}</p>
+                    <p>{extracted_data['body']['text']}</p>
                     <strong>Processing Time:</strong> {extracted_data['body']['elapsedTime']}
                 </div>
                 """,
