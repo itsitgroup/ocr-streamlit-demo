@@ -52,10 +52,10 @@ st.markdown(
 # Display logo and title
 st.markdown(
     """
-    <div class="logo">
-        <img src="https://github.com/itsitgroup/ocr-streamlit-demo/blob/main/logo.png" alt="Its IT Group Logo">
-        <h1 class="header">Image to Text Converter</h1>
-    </div>
+        <div class="logo">
+            <img src="logo.png" alt="Its IT Group Logo" style="width: 150px; height: 150px;">
+            <h1 class="header">Image to Text Converter</h1>
+        </div>
     """,
     unsafe_allow_html=True,
 )
@@ -76,7 +76,7 @@ with st.container():
             image = image.convert("RGB")
 
         # Display the uploaded image
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
 
         # Convert the image to base64
         buffered = io.BytesIO()
@@ -92,21 +92,30 @@ with st.container():
             )
 
         if response.status_code == 200:
-            # Display the extracted text
-            st.success("Text Extraction Successful!")
-            extracted_data = response.json()
-            st.markdown(
-                f"""
-                <div style="padding: 10px; background-color: #e8f5e9; border-radius: 5px;">
-                    <strong>Extracted Text:</strong>
-                    <p>{extracted_data['body']['text']}</p>
-                    <strong>Processing Time:</strong> {extracted_data['body']['elapsedTime']}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            try:
+                extracted_data = response.json()
+                if "body" in extracted_data and isinstance(extracted_data["body"], dict):
+                    st.success("Text Extraction Successful!")
+                    st.markdown(
+                        f"""
+                        <div style="padding: 10px; background-color: #e8f5e9; border-radius: 5px;">
+                            <strong>Extracted Text:</strong>
+                            <p>{extracted_data['body'].get('text', 'No text extracted')}</p>
+                            <strong>Processing Time:</strong> {extracted_data['body'].get('elapsedTime', 'N/A')}
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.error("Unexpected response format.")
+            except Exception as e:
+                st.error(f"Error parsing response: {str(e)}")
         else:
-            st.error(f"Error: {response.json().get('body', 'Unknown error occurred')}")
+            try:
+                error_data = response.json()
+                st.error(f"Error: {error_data.get('body', 'Unknown error occurred')}")
+            except Exception as e:
+                st.error(f"Error: Unable to parse error response. Details: {str(e)}")
 
     # End container styling
     st.markdown('</div>', unsafe_allow_html=True)
